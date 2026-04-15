@@ -65,7 +65,7 @@ class Services {
 
     _persistenceService = try PersistenceService(path: preloadService.databasePath, migrations: .allMigrations)
 
-    if launchService.didLaunchAfterFosdemYearChange {
+    if launchService.didLaunchAfterConferenceYearChange {
       favoritesService.removeAllTracksAndEvents()
     }
     favoritesService.migrate()

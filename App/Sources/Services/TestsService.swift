@@ -57,7 +57,7 @@ private struct PreventOnboarding: PreInitCommand {
   static func perform(with environment: [String: String]) {
     guard environment["ENABLE_ONBOARDING"] == nil else { return }
     let defaults = UserDefaults.standard
-    defaults.set(YearsService.current, forKey: LaunchService.latestFosdemYearKey)
+    defaults.set(YearsService.current, forKey: LaunchService.latestConferenceYearKey)
     defaults.set(Bundle.main.bundleShortVersion, forKey: LaunchService.latestBundleShortVersionKey)
   }
 }

@@ -5,21 +5,21 @@ final class LaunchService {
     case versionDetectionFailed
   }
 
-  static let latestFosdemYearKey = "LATEST_FOSDEM_YEAR"
+  static let latestConferenceYearKey = "org.ozgurkon.app.LATEST_CONFERENCE_YEAR"
   static let latestBundleShortVersionKey = "LATEST_BUNDLE_SHORT_VERSION"
 
   private(set) var didLaunchAfterUpdate = false
   private(set) var didLaunchAfterInstall = false
-  private(set) var didLaunchAfterFosdemYearChange = false
+  private(set) var didLaunchAfterConferenceYearChange = false
 
-  private let fosdemYear: Year
+  private let conferenceYear: Year
   private let bundle: LaunchServiceBundle
   private let defaults: LaunchServiceDefaults
 
   init(fosdemYear: Year, bundle: LaunchServiceBundle = Bundle.main, defaults: LaunchServiceDefaults = UserDefaults.standard) {
     self.bundle = bundle
     self.defaults = defaults
-    self.fosdemYear = fosdemYear
+    conferenceYear = fosdemYear
   }
 
   func detectStatus() throws {
@@ -39,24 +39,24 @@ final class LaunchService {
       didLaunchAfterInstall = true
     }
 
-    didLaunchAfterFosdemYearChange = !didLaunchAfterInstall && defaults.latestFosdemYear != fosdemYear
+    didLaunchAfterConferenceYearChange = !didLaunchAfterInstall && defaults.latestConferenceYear != conferenceYear
 
-    defaults.latestFosdemYear = fosdemYear
+    defaults.latestConferenceYear = conferenceYear
     defaults.latestBundleShortVersion = bundleShortVersion
   }
 
   #if DEBUG
   func markAsLaunched() {
-    defaults.latestFosdemYear = fosdemYear
+    defaults.latestConferenceYear = conferenceYear
     defaults.latestBundleShortVersion = bundle.bundleShortVersion
   }
   #endif
 }
 
 extension LaunchServiceDefaults {
-  var latestFosdemYear: Int? {
-    get { string(forKey: LaunchService.latestFosdemYearKey).flatMap { string in Int(string) } }
-    set { set(newValue?.description, forKey: LaunchService.latestFosdemYearKey) }
+  var latestConferenceYear: Int? {
+    get { string(forKey: LaunchService.latestConferenceYearKey).flatMap { string in Int(string) } }
+    set { set(newValue?.description, forKey: LaunchService.latestConferenceYearKey) }
   }
 
   var latestBundleShortVersion: String? {
@@ -69,7 +69,7 @@ extension LaunchServiceDefaults {
 protocol LaunchServiceProtocol {
   var didLaunchAfterUpdate: Bool { get }
   var didLaunchAfterInstall: Bool { get }
-  var didLaunchAfterFosdemYearChange: Bool { get }
+  var didLaunchAfterConferenceYearChange: Bool { get }
 
   func detectStatus() throws
   #if DEBUG
