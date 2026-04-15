@@ -1,0 +1,178 @@
+/// MARK: - Welcome
+
+"welcome.title" = "ÖzgürKon %@";
+"welcome.message" = "ÖzgürKon, Özgür Yazılım Derneği tarafından İstanbul’da düzenlenen uluslararası bir özgür yazılım konferansıdır.\n\nBu uygulama etkinlik programını görüntülemenize ve favorilerinizi planlamanıza yardımcı olur.";
+"welcome.continue" = "Devam";
+
+/// MARK: - Event
+
+"event.livestream" = "Canlı yayını oynat";
+"event.video.begin" = "Şimdi izle";
+"event.video.at" = "Oynatmaya devam et";
+"event.video.end" = "Yeniden izle";
+"event.video.accessibility.begin" = "Kaydı oynat";
+"event.video.accessibility.at" = "Kayda devam et";
+"event.video.accessibility.end" = "Kaydı yeniden oynat";
+"event.abstract" = "Özet";
+"event.links" = "Yararlı bağlantılar";
+"event.feedback_link" = "Geri bildirim";
+"event.attachments" = "Ekler";
+"event.room" = "Salon";
+"event.track" = "Kategori";
+"event.people" = "Konuşmacılar";
+"event.weekday" = "%@ günü";
+"event.duration" = "%@ dakika";
+"event.add" = "Takvimine ekle";
+"event.remove" = "Takviminden çıkar";
+
+/// MARK: - Attachment
+
+"attachment.slides" = "Sunum";
+"attachment.audio" = "Ses";
+"attachment.paper" = "Makale";
+"attachment.video" = "Video";
+
+/// MARK: - Agenda
+
+"agenda.title" = "Takvimim";
+"agenda.empty.title" = "Henüz etkinlik yok";
+"agenda.empty.message" = "ÖzgürKon’da zamanınızı planlamak için etkinlikleri kendi takviminize ekleyin";
+"agenda.filter.title" = "Etkinlikleri filtrele";
+"agenda.filter.accessibility.hint" = "Yalnızca yaklaşan etkinlikler gösteriliyor";
+"agenda.filter.menu.title" = "Göster";
+"agenda.filter.menu.action.all" = "Tüm etkinlikler";
+"agenda.filter.menu.action.upcoming" = "Yalnızca yaklaşan";
+
+/// MARK: - Soon
+
+"soon.title" = "Önümüzdeki 30 dakika";
+"soon.empty.title" = "Etkinlik yok";
+"soon.empty.message" = "Önümüzdeki 30 dakikada başlayan etkinlik yok";
+
+/// MARK: - Favorite
+
+"favorite" = "Favori";
+"unfavorite" = "Favoriden çıkar";
+
+/// MARK: - Search
+
+"search.title" = "Ara";
+"search.filter.title" = "Filtreler";
+"search.filter.all" = "Tüm kategoriler";
+"search.filter.menu.title" = "Kategorileri göster";
+"search.filter.menu.action.day" = "Yalnızca %@";
+"search.filter.menu.action.all" = "Her iki gün";
+"search.filter.favorites" = "Favorileriniz";
+"search.event.start" = "%@, %@";
+"search.empty.title" = "Sonuç yok";
+"search.empty.message" = "“%@” için bir sonuç bulunamadı";
+"search.error.title" = "Bir şeyler ters gitti";
+"search.error.message" = "Bu sorgu çok iyi. Başka bir şey deneyin.";
+
+/// MARK: - Map
+
+"map.title" = "Harita";
+"map.reset" = "Haritayı sıfırla";
+"map.building" = "Bina %@";
+"map.location" = "Konumumu göster";
+"map.location.enable" = "Konum hizmetlerini aç";
+"map.location.disable" = "Konum hizmetlerini kapat";
+"map.blueprint.title" = "Bina %@";
+"map.blueprint.empty" = "Plan yok";
+
+/// MARK: - Location
+
+"location.title.enable" = "Konum hizmetlerini aç";
+"location.title.disable" = "Konum hizmetlerini kapat";
+"location.message.enable" = "Konum hizmetlerini açarsanız haritada mevcut konumunuzu görebilirsiniz";
+"location.message.disable" = "İstediğiniz zaman yeniden açabilirsiniz";
+"location.dismiss" = "İptal";
+"location.confirm" = "Ayarları aç";
+
+/// MARK: - More
+
+"more.title" = "Daha fazla";
+"more.search.prompt" = "Etkinlik ara";
+"more.section.years" = "Program";
+"more.section.recent" = "Son izlenenler";
+"more.section.about" = "Hakkında";
+"more.section.settings" = "Ayarlar";
+"more.section.other" = "Diğer";
+
+/// MARK: - TimeZone
+
+"timeZone.title" = "Saat dilimi";
+"timeZone.conference" = "Konferans";
+"timeZone.current" = "Cihazınızın";
+"timeZone.footer" = "Etkinlik tarih ve saatlerinin hangi saat diliminde gösterileceğini seçin.";
+
+/// MARK: - Recent
+
+"recent.video" = "Videolar";
+"recent.video.watched" = "İzlenenler";
+"recent.video.watching" = "İzlenmekte";
+"recent.video.empty.title" = "Video yok";
+"recent.video.empty.watched" = "İzlediğiniz kayıtlar burada görünür";
+"recent.video.empty.watching" = "İzlemeye başladığınız kayıtlar burada görünür";
+
+/// MARK: - Acknowledgements
+
+"acknowledgements.title" = "Teşekkürler";
+
+/// MARK: - Legal
+
+"legal.title" = "Lisans";
+
+/// MARK: - Code
+
+"code.title" = "Kaynak kodu";
+
+/// MARK: - History
+
+"history.title" = "Konferans hakkında";
+
+/// MARK: - Years
+
+"years.item" = "%@ – %@";
+"years.title" = "Konferans programı";
+"years.year" = "ÖzgürKon %@";
+"years.progress" = "Yükleniyor";
+"years.unavailable.title" = "Yıl kullanılamıyor";
+"years.unavailable.message" = "Bu yıla ait veriler artık yok";
+"years.unavailable.dismiss" = "Tamam";
+
+/// MARK: - DevRooms
+
+"devrooms.title" = "Geliştirici odaları";
+
+/// MARK: - Transportation
+
+"transportation.title" = "Ulaşım";
+"transportation.section.directions" = "Yol tarifi";
+"transportation.section.by" = "Şununla ulaşım";
+"transportation.item.apple" = "Apple Haritalar’da aç";
+"transportation.item.google" = "Google Haritalar’da aç";
+"transportation.item.bus" = "Otobüs ve/veya tramvay";
+"transportation.item.train" = "Tren";
+"transportation.item.car" = "Araba";
+"transportation.item.plane" = "Uçak";
+"transportation.item.taxi" = "Taksi";
+
+/// MARK: - Update
+
+"update.title" = "Güncelleme var";
+"update.message" = "Uygulamanın yeni bir sürümü var. En son özellikler, veriler ve düzeltmeler için güncelleyin.";
+"update.dismiss" = "İptal";
+"update.confirm" = "Güncelle";
+
+/// MARK: - Error
+
+"error.functionality.title" = "Bir şeyler ters gitti!";
+"error.functionality.message" = "Daha sonra tekrar deneyin veya App Store’da güncellemelere bakın.";
+"error.functionality.action" = "App Store’u aç";
+"error.unknown.title" = "Hata oluştu";
+"error.unknown.message" = "Bir şeyler ters gitti. Daha sonra tekrar deneyin veya App Store’da güncellemelere bakın.";
+"error.internet.title" = "Yükleme hatası";
+"error.internet.message" = "İnternet bağlantısı çevrimdışı görünüyor.";
+"error.dismiss" = "Tamam";
+"error.retry" = "Yeniden dene";

@@ -1,9 +1,9 @@
 /// MARK: - Welcome
 
 // Title for the welcome screen of the app
-"welcome.title" = "FOSDEM %@";
-// A short message describing what FOSDEM - the event - is
-"welcome.message" = "FOSDEM is a free event for software developers to meet, share ideas and collaborate.\n\nEvery year, thousands of developers of free and open source software from all over the world gather at the event in Brussels.";
+"welcome.title" = "ÖzgürKon %@";
+// A short message describing ÖzgürKon - the event - is
+"welcome.message" = "ÖzgürKon is an international free software conference organized by Özgür Yazılım Derneği in Istanbul. \n\nThis app helps you browse the schedule and plan your favorites.";
 // A button that navigates from the welcome screen to the home
 "welcome.continue" = "Continue";
 
@@ -27,6 +27,8 @@
 "event.abstract" = "Abstract";
 // Title for a section that contains the list of useful links for an event
 "event.links" = "Useful links";
+// Label for the Pretalx feedback URL on an event
+"event.feedback_link" = "Feedback";
 // Title for a section that contains the list of attachments for an event
 "event.attachments" = "Attachments";
 // An accessibility label associated with the room where an event will take place
@@ -62,7 +64,7 @@
 // A short message reporting that the user has no events he plans to attend to
 "agenda.empty.title" = "No events yet";
 // A multiline instructional message specifying that events favorited by the user will appear in this screen
-"agenda.empty.message" = "Add events to your agenda to plan your time at FOSDEM";
+"agenda.empty.message" = "Add events to your agenda to plan your time at ÖzgürKon";
 // A label describing a button that allows the user to filter the list of events in the agenda
 "agenda.filter.title" = "Filter events";
 // A label that hints that only upcoming events are currently being displayed
@@ -119,7 +121,7 @@
 
 /// MARK: - Map
 
-// Title for a tab where the user can see the map of the FOSDEM venue
+// Title for a tab where the user can see the venue map (hidden in this edition)
 "map.title" = "Map";
 // A button that restores the original appearance of a map
 "map.reset" = "Reset map";
@@ -157,8 +159,8 @@
 "more.title" = "More";
 // Prompt for a search bar that will let the user search for a given
 "more.search.prompt" = "Search for events";
-// Title of a section containing a link to schedules for previous years of the conference
-"more.section.years" = "Previous years";
+// Title of a section containing a link to conference schedule editions
+"more.section.years" = "Schedule";
 // Title of a section containing a link to videos that have been watched by the user
 "more.section.recent" = "Recent";
 // Title of a section containing links to screens with history of the conference, an explanation of what developer rooms are and information on how to get to the conference
@@ -203,26 +205,26 @@
 /// MARK: - Legal
 
 // Title for a section of the app that contains legal information
-"legal.title" = "Legal";
+"legal.title" = "License and Legal";
 
 /// MARK: - Code
 
 // A link to the application project on Github
-"code.title" = "Contribute on Github";
+"code.title" = "Source code";
 
 /// MARK: - History
 
-// Title for a screen detailing of the FOSDEM conference came to be
-"history.title" = "History";
+// Title for a screen with conference history
+"history.title" = "About the conference";
 
 /// MARK: - Years
 
-// Link to a screen containing links to schedule of previous years of the conference
+// Link to a screen containing links to schedule editions
 "years.item" = "From %@ to %@";
-// Title for a screen containing links to schedule of previous years of the conference
-"years.title" = "Previous years";
+// Title for a screen containing links to schedule editions
+"years.title" = "Conference schedule";
 // A link to schedule for a given year
-"years.year" = "FOSDEM %@";
+"years.year" = "ÖzgürKon %@";
 // An announcement that communicates that download started
 "years.progress" = "Loading in progress";
 // Title for an alert reporting that the schedule for a given year is not available
