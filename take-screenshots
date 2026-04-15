@@ -1,19 +1,25 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Captures UITests/ScreenshotTests on modern simulators (App Store–friendly sizes).
+# Device strings must match an installed simulator — list with:
+#   xcrun simctl list devices available
+#
+# If a name is missing (e.g. older Xcode), swap for the closest match from that list
+# (e.g. "iPhone 15 Pro Max", "iPad Pro (12.9-inch) (6th generation)").
 
 declare -a devices=( \
-  "iPhone 8" \
-  "iPhone 8 Plus" \
-  "iPhone 11 Pro" \
-  "iPhone 11 Pro Max" \
-  "iPad (7th generation)" \
-  "iPad Pro (11-inch) (2nd generation)" \
-  "iPad Pro (12.9-inch) (4th generation)" \
+  "iPhone 16 Pro" \
+  "iPhone 16 Pro Max" \
+  "iPhone 16" \
+  "iPhone 16 Plus" \
+  "iPad Pro 11-inch (M4)" \
+  "iPad Pro 13-inch (M4)" \
 )
 
 for device in "${devices[@]}"
 do
   echo "Booting $device"
-  xcrun simctl boot "$device"
+  xcrun simctl boot "$device" 2>/dev/null || true
   echo "Configuring $device"
   xcrun simctl status_bar "$device" override \
     --batteryLevel 100 \
@@ -21,17 +27,17 @@ do
     --time "9:41"
 done
 
+destinations=()
+for device in "${devices[@]}"
+do
+  destinations+=("-destination" "name=$device")
+done
+
 xcodebuild \
-  -scheme FOSDEM \
+  -scheme OzgurKon \
   -sdk iphonesimulator \
   -derivedDataPath ./Build/ \
-  -destination "name=iPhone 8" \
-  -destination "name=iPhone 8 Plus" \
-  -destination "name=iPhone 11 Pro" \
-  -destination "name=iPhone 11 Pro Max" \
-  -destination "name=iPad (7th generation)" \
-  -destination "name=iPad Pro (11-inch) (2nd generation)" \
-  -destination "name=iPad Pro (12.9-inch) (4th generation)" \
+  "${destinations[@]}" \
   -only-testing UITests/ScreenshotTests/testScreenshots \
   test
 
@@ -40,5 +46,5 @@ find ./Build/Logs/Test -name \*.xcresult -maxdepth 1 -exec xcparse screenshots {
 for device in "${devices[@]}"
 do
   echo "Shutting down $device"
-  xcrun simctl shutdown "$device"
+  xcrun simctl shutdown "$device" 2>/dev/null || true
 done
