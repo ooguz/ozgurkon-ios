@@ -66,7 +66,7 @@ extension MoreController: MoreViewControllerDelegate {
   func moreViewController(_ moreViewController: MoreViewController, didSelect item: MoreItem) {
     switch item {
     case .code:
-      if let url = URL.fosdemGithub {
+      if let url = URL.sourceCodeRepository {
         dependencies.openService.open(url) { [weak moreViewController] _ in
           moreViewController?.deselectSelectedRow(animated: true)
         }

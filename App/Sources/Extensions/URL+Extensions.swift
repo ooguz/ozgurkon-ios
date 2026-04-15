@@ -1,11 +1,12 @@
 import Foundation
 
 extension URL {
-  static var fosdemAppStore: URL? {
-    URL(string: "https://itunes.apple.com/it/app/id1513719757")
+  /// Set this when the app is published on the App Store.
+  static var appStore: URL? {
+    nil
   }
 
-  static var fosdemGithub: URL? {
-    URL(string: "https://www.github.com/mttcrsp/fosdem")
+  static var sourceCodeRepository: URL? {
+    URL(string: "https://github.com/ooguz/ozgurkon-ios")
   }
 }

@@ -19,7 +19,7 @@ final class SceneDelegate: UIResponder, UISceneDelegate {
       rootViewController = applicationController
     } catch {
       let errorViewController = ErrorViewController()
-      errorViewController.showsAppStoreButton = true
+      errorViewController.showsAppStoreButton = URL.appStore != nil
       errorViewController.delegate = self
       rootViewController = errorViewController
     }
@@ -42,7 +42,7 @@ final class SceneDelegate: UIResponder, UISceneDelegate {
 
 extension SceneDelegate: ErrorViewControllerDelegate {
   func errorViewControllerDidTapAppStore(_: ErrorViewController) {
-    if let url = URL.fosdemAppStore {
+    if let url = URL.appStore {
       UIApplication.shared.open(url)
     }
   }

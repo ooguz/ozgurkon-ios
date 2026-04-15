@@ -22,8 +22,9 @@ final class UpdateService {
     networkService.perform(request) { result in
       guard case let .success(response) = result else { return }
 
-      guard let result = response.results.first(where: { result in result.bundleIdentifier == bundleIdentifier }) else {
-        return assertionFailure("AppStore search request did not return any application with identifier \(bundleIdentifier)")
+      // Until the app is live, iTunes search may omit this bundle id; treat as no update.
+      guard let result = response.results.first(where: { $0.bundleIdentifier == bundleIdentifier }) else {
+        return
       }
 
       if result.version.compare(bundleShortVersion, options: .numeric) == .orderedDescending {
