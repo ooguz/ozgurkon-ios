@@ -27,9 +27,9 @@ final class ScheduleService {
   }
 
   func startUpdating() {
-    performUpdate()
+    performUpdate(requiresFullInterval: false)
     timer = timer ?? .scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] _ in
-      self?.performUpdate()
+      self?.performUpdate(requiresFullInterval: true)
     }
   }
 
@@ -43,28 +43,40 @@ final class ScheduleService {
     set { defaults.latestScheduleUpdate = newValue }
   }
 
-  private var shouldPerformUpdate: Bool {
-    abs(latestUpdate.timeIntervalSinceNow) >= timeInterval
-  }
+  private func performUpdate(requiresFullInterval: Bool) {
+    guard !isUpdating else { return }
+    let intervalElapsed = abs(latestUpdate.timeIntervalSinceNow) >= timeInterval
+    guard !requiresFullInterval || intervalElapsed else { return }
 
-  private func performUpdate() {
-    guard shouldPerformUpdate, !isUpdating else { return }
     isUpdating = true
 
     let request = ScheduleRequest(year: fosdemYear)
     networkService.perform(request) { [weak self] result in
-      guard case let .success(schedule) = result, let self else { return }
+      guard let self else { return }
 
-      #if DEBUG
-      guard isEnabled else { return }
-      #endif
+      switch result {
+      case .failure:
+        isUpdating = false
+        return
+      case let .success(schedule):
+        #if DEBUG
+        guard isEnabled else {
+          isUpdating = false
+          return
+        }
+        #endif
 
-      let operation = UpsertSchedule(schedule: schedule)
-      persistenceService.performWrite(operation) { [weak self] error in
-
-        assert(error == nil)
-        self?.isUpdating = false
-        self?.latestUpdate = Date()
+        let operation = UpsertSchedule(schedule: schedule)
+        persistenceService.performWrite(operation) { [weak self] error in
+          assert(error == nil)
+          self?.isUpdating = false
+          if error == nil {
+            self?.latestUpdate = Date()
+            DispatchQueue.main.async {
+              NotificationCenter.default.post(name: Notification.Name.scheduleDatabaseDidUpdate, object: nil)
+            }
+          }
+        }
       }
     }
   }
@@ -124,4 +136,9 @@ extension PersistenceService: ScheduleServicePersistence {}
 
 protocol HasScheduleService {
   var scheduleService: ScheduleServiceProtocol { get }
+}
+
+extension Notification.Name {
+  /// Posted on the main queue after Pretalx schedule data is written to the app database.
+  static let scheduleDatabaseDidUpdate = Notification.Name("org.ozgurkon.app.scheduleDatabaseDidUpdate")
 }

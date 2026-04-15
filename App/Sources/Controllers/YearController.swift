@@ -15,6 +15,7 @@ final class YearController: TracksViewController {
 
   private let dependencies: Dependencies
   let persistenceService: PersistenceServiceProtocol
+  private var scheduleDatabaseObserver: NSObjectProtocol?
 
   init(persistenceService: PersistenceServiceProtocol, dependencies: Dependencies) {
     self.dependencies = dependencies
@@ -53,6 +54,20 @@ final class YearController: TracksViewController {
     self.searchController = searchController
     addSearchViewController(searchController)
 
+    loadTracks()
+
+    scheduleDatabaseObserver = NotificationCenter.default.addObserver(forName: .scheduleDatabaseDidUpdate, object: nil, queue: .main) { [weak self] _ in
+      self?.loadTracks()
+    }
+  }
+
+  deinit {
+    if let scheduleDatabaseObserver {
+      NotificationCenter.default.removeObserver(scheduleDatabaseObserver)
+    }
+  }
+
+  private func loadTracks() {
     persistenceService.performRead(GetAllTracks()) { [weak self] result in
       DispatchQueue.main.async {
         guard let self else { return }

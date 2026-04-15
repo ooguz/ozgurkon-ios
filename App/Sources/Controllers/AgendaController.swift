@@ -59,6 +59,9 @@ final class AgendaController: UIViewController {
       dependencies.dateFormattingService.addObserverForFormattingTimeZoneChanges { [weak self] in
         self?.agendaViewController?.reloadData()
       },
+      NotificationCenter.default.addObserver(forName: .scheduleDatabaseDidUpdate, object: nil, queue: .main) { [weak self] _ in
+        self?.reloadFavoriteEvents(animated: true)
+      },
     ]
   }
 
@@ -281,7 +284,7 @@ private extension UIViewController {
 }
 
 private extension UserDefaults {
-  private static let shouldFilterEventsKey = "com.mttcrsp.fosdem.shouldFilterEventsKey"
+  private static let shouldFilterEventsKey = "org.ozgurkon.app.shouldFilterEventsKey"
 
   var shouldFilterEvents: Bool {
     set { set(newValue, forKey: Self.shouldFilterEventsKey) }

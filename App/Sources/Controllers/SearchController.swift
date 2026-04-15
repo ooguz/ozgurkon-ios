@@ -82,7 +82,10 @@ final class SearchController: UISplitViewController {
       },
       dependencies.dateFormattingService.addObserverForFormattingTimeZoneChanges { [weak self] in
         self?.reloadTracks()
-      }
+      },
+      NotificationCenter.default.addObserver(forName: .scheduleDatabaseDidUpdate, object: nil, queue: .main) { [weak self] _ in
+        self?.reloadTracks()
+      },
     ]
   }
 

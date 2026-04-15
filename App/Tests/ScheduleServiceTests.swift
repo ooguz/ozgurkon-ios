@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import XCTest
 
 final class ScheduleServiceTests: XCTestCase {
@@ -21,7 +21,7 @@ final class ScheduleServiceTests: XCTestCase {
     }
 
     let service = ScheduleService(
-      fosdemYear: 2021,
+      fosdemYear: 2026,
       networkService: networkService,
       persistenceService: persistenceService,
       defaults: defaults,
@@ -30,7 +30,7 @@ final class ScheduleServiceTests: XCTestCase {
 
     service.startUpdating()
     XCTAssertNotNil(networkCompletion)
-    XCTAssertEqual(networkService.performArgValues.first?.url, URL(string: "https://fosdem.org/2021/schedule/xml"))
+    XCTAssertEqual(networkService.performArgValues.first?.url, PretalxConfiguration.scheduleExportURL)
 
     networkCompletion?(.success(makeSchedule()))
     XCTAssertNotNil(persistenceCompletion)
@@ -57,7 +57,7 @@ final class ScheduleServiceTests: XCTestCase {
     }
 
     let service = ScheduleService(
-      fosdemYear: 2021,
+      fosdemYear: 2026,
       networkService: networkService,
       persistenceService: persistenceService,
       defaults: defaults,
@@ -76,7 +76,7 @@ final class ScheduleServiceTests: XCTestCase {
     service.stopUpdating()
   }
 
-  func testUpdatePreventsUnnecessary() {
+  func testEachStartUpdatingRequestsSchedule() {
     let persistenceService = ScheduleServicePersistenceMock()
     let networkService = ScheduleServiceNetworkMock()
     let defaults = makeDefaultsMock()
@@ -94,7 +94,7 @@ final class ScheduleServiceTests: XCTestCase {
     }
 
     let service = ScheduleService(
-      fosdemYear: 2021,
+      fosdemYear: 2026,
       networkService: networkService,
       persistenceService: persistenceService,
       defaults: defaults,
@@ -107,8 +107,10 @@ final class ScheduleServiceTests: XCTestCase {
     service.stopUpdating()
 
     service.startUpdating()
-    XCTAssertEqual(networkService.performCallCount, 1)
-    XCTAssertEqual(persistenceService.performWriteCallCount, 1)
+    XCTAssertEqual(networkService.performCallCount, 2)
+    networkCompletion?(.success(makeSchedule()))
+    persistenceCompletion?(nil)
+    XCTAssertEqual(persistenceService.performWriteCallCount, 2)
     service.stopUpdating()
   }
 
@@ -123,7 +125,7 @@ final class ScheduleServiceTests: XCTestCase {
     }
 
     let service = ScheduleService(
-      fosdemYear: 2021,
+      fosdemYear: 2026,
       networkService: networkService,
       persistenceService: persistenceService,
       defaults: defaults,
