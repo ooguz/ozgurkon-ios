@@ -1,38 +1,29 @@
 import Foundation
 
 struct ScheduleRequest: NetworkRequest {
-  enum Error: CustomNSError {
+  enum Error: CustomNSError, Equatable {
     case notFound
+    case invalidSchedule
   }
 
   let year: Int
 
   var url: URL {
-    URL(string: "https://fosdem.org/")!
-      .appendingPathComponent(year.description)
-      .appendingPathComponent("schedule")
-      .appendingPathComponent("xml")
+    PretalxConfiguration.scheduleExportURL
   }
 
   func decode(_ data: Data?, response: HTTPURLResponse?) throws -> Schedule {
+    guard year == PretalxConfiguration.supportedYear else {
+      throw Error.notFound
+    }
     guard let data, response?.statusCode != 404 else {
       throw Error.notFound
     }
 
-    let parser = ScheduleXMLParser(data: data)
-
-    if parser.parse(), let schedule = parser.schedule {
-      return schedule
+    let xmlParser = ScheduleXMLParser(data: data)
+    guard xmlParser.parse(), let schedule = xmlParser.schedule else {
+      throw Error.invalidSchedule
     }
-
-    if let validationError = parser.validationError {
-      throw validationError
-    }
-
-    if let parseError = parser.parseError {
-      throw parseError
-    }
-
-    throw NSError(domain: "com.mttcrsp.ScheduleRequest", code: 1)
+    return schedule
   }
 }

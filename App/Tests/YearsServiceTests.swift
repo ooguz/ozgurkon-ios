@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import XCTest
 
 final class YearsServiceTests: XCTestCase {
@@ -11,10 +11,10 @@ final class YearsServiceTests: XCTestCase {
     let networkService = YearsServiceNetworkMock()
     let service = YearsService(networkService: networkService, fileManager: fileManager)
 
-    XCTAssertTrue(service.isYearDownloaded(2021))
+    XCTAssertTrue(service.isYearDownloaded(2026))
     XCTAssertEqual(fileManager.urlsArgValues.map(\.0), [.documentDirectory])
     XCTAssertEqual(fileManager.urlsArgValues.map(\.1), [.userDomainMask])
-    XCTAssertEqual(fileManager.fileExistsArgValues, ["/test/2021.sqlite"])
+    XCTAssertEqual(fileManager.fileExistsArgValues, ["/test/2026.sqlite"])
   }
 
   func testIsYearDownloadedMissingDocuments() {
@@ -24,7 +24,7 @@ final class YearsServiceTests: XCTestCase {
     let networkService = YearsServiceNetworkMock()
     let service = YearsService(networkService: networkService, fileManager: fileManager)
 
-    XCTAssertFalse(service.isYearDownloaded(2021))
+    XCTAssertFalse(service.isYearDownloaded(2026))
   }
 
   func testIsYearDownloadedNoFile() {
@@ -35,7 +35,7 @@ final class YearsServiceTests: XCTestCase {
     let networkService = YearsServiceNetworkMock()
     let service = YearsService(networkService: networkService, fileManager: fileManager)
 
-    XCTAssertFalse(service.isYearDownloaded(2021))
+    XCTAssertFalse(service.isYearDownloaded(2026))
   }
 
   func testDownloadYear() {
@@ -66,7 +66,7 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    let task = service.downloadYear(2021) { error in
+    let task = service.downloadYear(2026) { error in
       XCTAssertNil(error)
       expectation.fulfill()
     }
@@ -74,12 +74,12 @@ final class YearsServiceTests: XCTestCase {
 
     XCTAssertTrue(task as? NetworkServiceTaskMock === networkServiceTask)
     XCTAssertEqual(networkService.performCallCount, 1)
-    XCTAssertEqual(networkService.performArgValues.first?.url.absoluteString, "https://fosdem.org/2021/schedule/xml")
+    XCTAssertEqual(networkService.performArgValues.first?.url, PretalxConfiguration.scheduleExportURL)
     XCTAssertEqual(fileManager.urlsArgValues.map(\.0), [.documentDirectory, .documentDirectory, .documentDirectory])
     XCTAssertEqual(fileManager.urlsArgValues.map(\.1), [.userDomainMask, .userDomainMask, .userDomainMask])
     XCTAssertEqual(fileManager.createDirectoryArgValues.map(\.0), [URL(fileURLWithPath: "test/years")])
     XCTAssertEqual(fileManager.createDirectoryArgValues.map(\.1), [true])
-    XCTAssertEqual(fileManager.createFileArgValues.map(\.0), ["/test/2021.sqlite"])
+    XCTAssertEqual(fileManager.createFileArgValues.map(\.0), ["/test/2026.sqlite"])
     XCTAssertEqual(fileManager.createFileArgValues.map(\.1), [nil])
     XCTAssertTrue(yearPersistenceService.performWriteArgValues.first is UpsertSchedule)
   }
@@ -104,7 +104,7 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    _ = service.downloadYear(2021) { receivedError in
+    _ = service.downloadYear(2026) { receivedError in
       XCTAssertEqual(error, receivedError as NSError?)
       expectation.fulfill()
     }
@@ -131,7 +131,7 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    _ = service.downloadYear(2021) { error in
+    _ = service.downloadYear(2026) { error in
       let error1 = error as NSError?
       let error2 = YearsService.Error.documentDirectoryNotFound as NSError?
       XCTAssertEqual(error1, error2)
@@ -163,7 +163,7 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    _ = service.downloadYear(2021) { receivedError in
+    _ = service.downloadYear(2026) { receivedError in
       XCTAssertEqual(error, receivedError as NSError?)
       expectation.fulfill()
     }
@@ -193,7 +193,7 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    _ = service.downloadYear(2021) { receivedError in
+    _ = service.downloadYear(2026) { receivedError in
       XCTAssertEqual(error, receivedError as NSError?)
       expectation.fulfill()
     }
@@ -227,11 +227,25 @@ final class YearsServiceTests: XCTestCase {
     )
 
     let expectation = expectation(description: #function)
-    _ = service.downloadYear(2021) { receivedError in
+    _ = service.downloadYear(2026) { receivedError in
       XCTAssertEqual(error, receivedError as NSError?)
       expectation.fulfill()
     }
     waitForExpectations(timeout: 1)
+  }
+
+  func testDownloadYearUnsupportedEditionReturnsUnavailableWithoutNetwork() {
+    let networkService = YearsServiceNetworkMock()
+    let fileManager = YearsServiceFileMock()
+    let service = YearsService(networkService: networkService, fileManager: fileManager)
+
+    let expectation = expectation(description: #function)
+    _ = service.downloadYear(2021) { error in
+      XCTAssertEqual(error as? YearsService.Error, .yearNotAvailable)
+      expectation.fulfill()
+    }
+    waitForExpectations(timeout: 1)
+    XCTAssertEqual(networkService.performCallCount, 0)
   }
 
   private func makeSchedule() -> Schedule {

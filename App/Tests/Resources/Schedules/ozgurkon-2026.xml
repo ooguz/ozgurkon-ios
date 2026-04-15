@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<schedule>
+  <conference>
+    <title>ÖzgürKon 2026</title>
+    <start>2026-04-25</start>
+    <end>2026-04-26</end>
+    <days>2</days>
+    <timeslot_duration>00:05</timeslot_duration>
+  </conference>
+  <day index='1' date='2026-04-25'>
+    <room name='Tiyatro salonu'>
+      <event guid='0c06fb3f-121e-5801-bf69-eb890d404ce5' id='1'>
+        <room>Tiyatro salonu</room>
+        <title>Opening talk</title>
+        <subtitle></subtitle>
+        <type>Short talk</type>
+        <date>2026-04-25T09:30:00+03:00</date>
+        <start>09:30</start>
+        <duration>00:25</duration>
+        <abstract>The opening talk</abstract>
+        <slug>ozgurkon-2026-1</slug>
+        <track>Konferans / Dernek</track>
+        <persons>
+          <person id='1'>Özcan Oğuz</person>
+        </persons>
+        <language>en</language>
+        <description>The opening talk</description>
+        <links></links>
+        <attachments></attachments>
+        <url>https://cfp.oyd.org.tr/ozgurkon-2026/talk/TGMF9W/</url>
+        <feedback_url>https://cfp.oyd.org.tr/ozgurkon-2026/talk/TGMF9W/feedback/</feedback_url>
+      </event>
+    </room>
+  </day>
+</schedule>

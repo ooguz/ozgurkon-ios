@@ -46,12 +46,12 @@ final class ScheduleXMLParser: NSObject, XMLParserDelegate {
   }
 
   func parser(_: XMLParser, foundCharacters string: String) {
-    let value = string.trimmingCharacters(in: .whitespacesAndNewlines)
-    if !value.isEmpty {
-      var (name, attributes) = stack.removeLast()
-      attributes["value", default: ""] += value
-      stack.append((name, attributes))
-    }
+    guard !string.isEmpty else { return }
+    // Do not trim per chunk: `XMLParser` often splits text across multiple
+    // callbacks; trimming would strip spaces between words at chunk boundaries.
+    var (name, attributes) = stack.removeLast()
+    attributes["value", default: ""] += string
+    stack.append((name, attributes))
   }
 
   func parser(_: XMLParser, didEndElement _: String, namespaceURI _: String?, qualifiedName _: String?) {
@@ -147,13 +147,13 @@ final class ScheduleXMLParser: NSObject, XMLParserDelegate {
 
   private func didParseEventAttribute(withName name: String, attributes: [String: String]) {
     var (eventName, eventAttributes) = stack.removeLast()
-    eventAttributes[name] = attributes["value"]
+    eventAttributes[name] = attributes["value"].map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
     stack.append((eventName, eventAttributes))
   }
 
   private func didParseConferenceAttribute(withName name: String, attributes: [String: String]) {
     var (conferenceName, conferenceAttributes) = stack.removeLast()
-    conferenceAttributes[name] = attributes["value"]
+    conferenceAttributes[name] = attributes["value"].map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
     stack.append((conferenceName, conferenceAttributes))
   }
 }
@@ -168,7 +168,7 @@ extension ScheduleXMLParser.Error: Swift.Error, CustomNSError {
   }
 
   static var errorDomain: String {
-    "com.mttcrsp.fosdem.\(String(describing: Self.self))"
+    "org.ozgurkon.app.\(String(describing: Self.self))"
   }
 }
 
@@ -180,7 +180,9 @@ private extension Link {
   }
 
   init(attributes: [String: String]) throws {
-    guard let href = attributes["href"], let name = attributes["value"] else {
+    guard let href = attributes["href"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+          let name = attributes["value"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !name.isEmpty else {
       throw Error(element: "link", value: attributes)
     }
 
@@ -197,7 +199,9 @@ private extension Person {
   }
 
   init(attributes: [String: String]) throws {
-    guard let idRawValue = attributes["id"], let name = attributes["value"] else {
+    guard let idRawValue = attributes["id"],
+          let name = attributes["value"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+          !name.isEmpty else {
       throw Error(element: "person", value: attributes)
     }
 
@@ -237,7 +241,7 @@ private extension Event {
   }
 
   static var attributesNames: Set<String> {
-    ["start", "duration", "room", "slug", "title", "subtitle", "track", "type", "language", "abstract", "description", "url"]
+    ["start", "duration", "room", "slug", "title", "subtitle", "track", "type", "language", "abstract", "description", "url", "feedback_url"]
   }
 
   init(attributes: [String: String], state: ScheduleXMLParser.EventState, dayAttributes: [String: String]) throws {
@@ -282,7 +286,15 @@ private extension Event {
     let subtitle = attributes["subtitle"]
     let abstract = attributes["abstract"]
     let url = attributes["url"].flatMap(URL.init)
-    self.init(id: id, url: url, room: room, track: track, title: title, summary: summary, subtitle: subtitle, abstract: abstract, date: date, start: start, duration: duration, links: state.links, people: state.people, attachments: state.attachments)
+
+    var links = state.links
+    if let feedbackRaw = attributes["feedback_url"]?.trimmingCharacters(in: .whitespacesAndNewlines),
+       !feedbackRaw.isEmpty,
+       let feedbackURL = URL(string: feedbackRaw) {
+      links.append(Link(name: L10n.Event.feedbackLink, url: feedbackURL))
+    }
+
+    self.init(id: id, url: url, room: room, track: track, title: title, summary: summary, subtitle: subtitle, abstract: abstract, date: date, start: start, duration: duration, links: links, people: state.people, attachments: state.attachments)
   }
 }
 
@@ -336,7 +348,7 @@ private extension Conference {
   }
 
   init(attributes: [String: String]) throws {
-    guard let title = attributes["title"], let venue = attributes["venue"], let startRawValue = attributes["start"], let endRawValue = attributes["end"] else {
+    guard let title = attributes["title"], let startRawValue = attributes["start"], let endRawValue = attributes["end"] else {
       throw Error(element: "conference", value: attributes)
     }
 
@@ -349,7 +361,8 @@ private extension Conference {
     }
 
     let subtitle = attributes["subtitle"]
-    let city = attributes["city"]
+    let venue = attributes["venue"] ?? PretalxConfiguration.defaultVenue
+    let city = attributes["city"] ?? PretalxConfiguration.defaultCity
     self.init(title: title, subtitle: subtitle, venue: venue, city: city, start: start, end: end)
   }
 }

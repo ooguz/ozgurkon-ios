@@ -7,7 +7,7 @@ final class YearsService {
   }
 
   static let current = 2026
-  static let all = 2012 ... current - 1
+  static let all = current ... current
 
   private let fileManager: YearsServiceFile
   private let networkService: YearsServiceNetwork
@@ -20,6 +20,13 @@ final class YearsService {
   }
 
   func downloadYear(_ year: Int, completion: @escaping (Swift.Error?) -> Void) -> NetworkServiceTask {
+    guard year == PretalxConfiguration.supportedYear else {
+      DispatchQueue.main.async {
+        completion(Error.yearNotAvailable)
+      }
+      return CompletedNetworkTask()
+    }
+
     let request = ScheduleRequest(year: year)
     return networkService.perform(request) { [weak self] result in
       guard let self else { return }
@@ -116,6 +123,11 @@ protocol YearsServiceFile {
 }
 
 extension FileManager: YearsServiceFile {}
+
+private final class CompletedNetworkTask: NetworkServiceTask {
+  func cancel() {}
+  func resume() {}
+}
 
 protocol HasYearsService {
   var yearsService: YearsServiceProtocol { get }
