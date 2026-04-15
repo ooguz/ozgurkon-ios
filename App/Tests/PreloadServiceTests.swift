@@ -1,25 +1,19 @@
 @testable
-import Fosdem
+import OzgurKon
 import XCTest
 
 final class PreloadServiceTests: XCTestCase {
-  func testInitResourceNotFoundError() {
-    do {
-      let bundle = PreloadServiceBundleMock()
-      bundle.pathHandler = { _, _ in nil }
+  func testInitSucceedsWithoutBundledDatabaseTemplate() throws {
+    let bundle = PreloadServiceBundleMock()
+    bundle.pathHandler = { _, _ in nil }
 
-      let fileManagerURL = URL(fileURLWithPath: "/documents")
-      let fileManager = PreloadServiceFileMock()
-      fileManager.fileExistsHandler = { _ in false }
-      fileManager.urlHandler = { _, _, _, _ in fileManagerURL }
+    let fileManagerURL = URL(fileURLWithPath: "/documents")
+    let fileManager = PreloadServiceFileMock()
+    fileManager.fileExistsHandler = { _ in false }
+    fileManager.urlHandler = { _, _, _, _ in fileManagerURL }
 
-      _ = try PreloadService(bundle: bundle, fileManager: fileManager)
-      XCTFail("Unexpectedly succeeded in initialising from bundle service")
-    } catch {
-      let error1 = error as NSError
-      let error2 = PreloadService.Error.resourceNotFound as NSError
-      XCTAssertEqual(error1, error2)
-    }
+    let service = try PreloadService(bundle: bundle, fileManager: fileManager)
+    XCTAssertEqual(service.databasePath, "/documents/db.sqlite")
   }
 
   func testInitURLError() {
@@ -70,6 +64,49 @@ final class PreloadServiceTests: XCTestCase {
     XCTAssertEqual(fileManager.copyItemCallCount, 1)
     XCTAssertEqual(fileManager.copyItemArgValues.first?.0, "/bundle")
     XCTAssertEqual(fileManager.copyItemArgValues.first?.1, "/documents/db.sqlite")
+  }
+
+  func testPreloadDatabaseIfNeededCreatesEmptyFileWhenNoBundledTemplate() throws {
+    let bundle = PreloadServiceBundleMock()
+    bundle.pathHandler = { _, _ in nil }
+
+    let fileManagerURL = URL(fileURLWithPath: "/documents")
+    let fileManager = PreloadServiceFileMock()
+    fileManager.fileExistsHandler = { _ in false }
+    fileManager.urlHandler = { _, _, _, _ in fileManagerURL }
+    fileManager.createFileHandler = { path, data, attributes in
+      XCTAssertEqual(path, "/documents/db.sqlite")
+      XCTAssertNil(data)
+      XCTAssertNil(attributes)
+      return true
+    }
+
+    let service = try PreloadService(bundle: bundle, fileManager: fileManager)
+    try service.preloadDatabaseIfNeeded()
+
+    XCTAssertEqual(fileManager.copyItemCallCount, 0)
+    XCTAssertEqual(fileManager.createFileCallCount, 1)
+  }
+
+  func testPreloadDatabaseIfNeededCreateEmptyFileError() {
+    let bundle = PreloadServiceBundleMock()
+    bundle.pathHandler = { _, _ in nil }
+
+    let fileManagerURL = URL(fileURLWithPath: "/documents")
+    let fileManager = PreloadServiceFileMock()
+    fileManager.fileExistsHandler = { _ in false }
+    fileManager.urlHandler = { _, _, _, _ in fileManagerURL }
+    fileManager.createFileHandler = { _, _, _ in false }
+
+    do {
+      let service = try PreloadService(bundle: bundle, fileManager: fileManager)
+      try service.preloadDatabaseIfNeeded()
+      XCTFail("Unexpectedly succeeded in preloading database")
+    } catch {
+      let error1 = error as NSError
+      let error2 = PreloadService.Error.couldNotCreateEmptyDatabase as NSError
+      XCTAssertEqual(error1, error2)
+    }
   }
 
   func testPreloadDatabaseIfNeededFileExists() throws {

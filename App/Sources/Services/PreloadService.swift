@@ -6,6 +6,8 @@ protocol PreloadServiceFile {
   func copyItem(atPath srcPath: String, toPath dstPath: String) throws
   func url(for directory: FileManager.SearchPathDirectory, in domain: FileManager.SearchPathDomainMask, appropriateFor url: URL?, create shouldCreate: Bool) throws -> URL
   func removeItem(atPath path: String) throws
+  @discardableResult
+  func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey: Any]?) -> Bool
 }
 
 /// @mockable
@@ -15,29 +17,22 @@ protocol PreloadServiceBundle {
 
 final class PreloadService {
   enum Error: CustomNSError {
-    case resourceNotFound
+    case couldNotCreateEmptyDatabase
   }
 
-  private let oldPath: String
+  private let bundledTemplatePath: String?
   private let newPath: String
-  private let bundle: PreloadServiceBundle
   private let fileManager: PreloadServiceFile
 
   init(bundle: PreloadServiceBundle = Bundle.main, fileManager: PreloadServiceFile = FileManager.default) throws {
     self.fileManager = fileManager
-    self.bundle = bundle
 
     let fileName = "db", fileExtension = "sqlite"
-    guard let oldPath = bundle.path(forResource: fileName, ofType: fileExtension) else {
-      throw Error.resourceNotFound
-    }
+    bundledTemplatePath = bundle.path(forResource: fileName, ofType: fileExtension)
 
     let applicationSupportURL = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
     let applicationDatabaseURL = applicationSupportURL.appendingPathComponent(fileName).appendingPathExtension(fileExtension)
-    let newPath = applicationDatabaseURL.path
-
-    self.oldPath = oldPath
-    self.newPath = newPath
+    newPath = applicationDatabaseURL.path
   }
 
   var databasePath: String {
@@ -50,7 +45,13 @@ final class PreloadService {
 
   func preloadDatabaseIfNeeded() throws {
     if !fileManager.fileExists(atPath: newPath) {
-      try fileManager.copyItem(atPath: oldPath, toPath: newPath)
+      if let bundledTemplatePath {
+        try fileManager.copyItem(atPath: bundledTemplatePath, toPath: newPath)
+      } else {
+        guard fileManager.createFile(atPath: newPath, contents: nil, attributes: nil) else {
+          throw Error.couldNotCreateEmptyDatabase
+        }
+      }
     }
   }
 }
