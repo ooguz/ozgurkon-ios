@@ -59,15 +59,6 @@ final class ApplicationController: UIViewController {
     }
     tabViewControllers.append(agendaViewController)
 
-    let mapViewController = dependencies.navigationService.makeMapViewController()
-    mapViewController.tabBarItem.accessibilityIdentifier = "map"
-    mapViewController.tabBarItem.image = UIImage(systemName: "map")
-    mapViewController.title = L10n.Map.title
-    mapViewController.didError = { [weak self] viewController, error in
-      self?.mapViewController(viewController, didError: error)
-    }
-    tabViewControllers.append(mapViewController)
-
     let moreViewController = dependencies.navigationService.makeMoreViewController()
     moreViewController.tabBarItem.accessibilityIdentifier = "more"
     moreViewController.tabBarItem.image = UIImage(systemName: "ellipsis.circle")
@@ -155,7 +146,7 @@ private extension ApplicationController {
   }
 
   func didTapUpdate() {
-    if let url = URL.fosdemAppStore {
+    if let url = URL.appStore {
       dependencies.openService.open(url, completion: nil)
     }
   }
@@ -167,12 +158,6 @@ private extension ApplicationController {
     errorViewController.didMove(toParent: agendaViewController)
   }
 
-  func mapViewController(_ mapViewController: UIViewController, didError _: Error) {
-    let errorViewController = ErrorViewController()
-    mapViewController.addChild(errorViewController)
-    mapViewController.view.addSubview(errorViewController.view)
-    errorViewController.didMove(toParent: mapViewController)
-  }
 }
 
 extension ApplicationController: UITabBarControllerDelegate {
@@ -196,14 +181,7 @@ extension ApplicationController: UITabBarControllerDelegate {
 
   func tabBarControllerDidChangeSelectedViewController(_ tabBarController: UITabBarController) {
     guard #available(iOS 15.0, *) else { return }
-
-    if tabBarController.selectedViewController is MapController {
-      let appearance = UITabBarAppearance()
-      appearance.configureWithOpaqueBackground()
-      tabBarController.tabBar.scrollEdgeAppearance = appearance
-    } else {
-      tabBarController.tabBar.scrollEdgeAppearance = nil
-    }
+    tabBarController.tabBar.scrollEdgeAppearance = nil
   }
 }
 
