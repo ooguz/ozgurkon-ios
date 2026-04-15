@@ -1,6 +1,6 @@
 import AVKit
 @testable
-import Fosdem
+import OzgurKon
 import SafariServices
 import SnapshotTesting
 import XCTest

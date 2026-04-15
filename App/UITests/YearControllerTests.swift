@@ -1,49 +1,17 @@
 import XCTest
 
 final class YearControllerTests: XCTestCase {
-  private var app: XCUIApplication!
-
-  override func setUp() {
-    super.setUp()
-    app = XCUIApplication()
+  func testConferenceEditionRow() {
+    let app = XCUIApplication()
     app.launch()
     app.moreButton.tap()
     app.yearsCell.tap()
-    app.yearCell.tap()
-  }
-
-  func testTracks() {
-    wait { self.app.trackCell.exists }
-    app.trackCell.tap()
-    app.staticTexts["Welcome to the Ada DevRoom"].tap()
-    app.backButton.tap()
-    app.backButton.tap()
-  }
-
-  func testSearch() {
-    let cancelButton = app.navigationBars.buttons.firstMatch
-    let searchField = app.searchFields.firstMatch
-
-    wait { searchField.exists }
-    searchField.tap()
-    searchField.typeText("FOSDEM")
-    app.staticTexts["Welcome to FOSDEM 2019"].tap()
-    app.backButton.tap()
-    cancelButton.tap()
-    XCTAssert(app.navigationBars["2019"].exists)
+    XCTAssertTrue(app.cells["2026"].waitForExistence(timeout: 5))
   }
 }
 
 private extension XCUIApplication {
   var yearsCell: XCUIElement {
     cells["years"]
-  }
-
-  var yearCell: XCUIElement {
-    cells["2019"]
-  }
-
-  var trackCell: XCUIElement {
-    cells["Ada"]
   }
 }

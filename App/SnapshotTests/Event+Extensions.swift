@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import Foundation
 
 extension Event {

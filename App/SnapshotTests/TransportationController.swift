@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import SnapshotTesting
 import XCTest
 
@@ -38,11 +38,11 @@ final class TransportationControllerTests: XCTestCase {
 
     transportationController.transportationViewController(transportationViewController, didSelect: .appleMaps)
     XCTAssertEqual(openService.openCallCount, 1)
-    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://maps.apple.com/?address=Avenue%20Franklin%20Roosevelt%2050,%201050%20Brussels,%20Belgium&auid=2450730505287536200&ll=50.812050,4.382236&lsp=9902&q=Universit%C3%A9%20Libre%20de%20Bruxelles&_ext=ChgKBAgEEFcKBAgFEAMKBAgGEBkKBAgKEAESJCkjtQWwbFxJQDFgm0ZDufUQQDkZviUmcHNJQEGgZLl8GBkSQA%3D%3D")
+    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://maps.apple.com/?q=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")
 
     transportationController.transportationViewController(transportationViewController, didSelect: .googleMaps)
     XCTAssertEqual(openService.openCallCount, 2)
-    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.google.com/maps/place/Universit%C3%A9+Libre+de+Bruxelles/@50.8132068,4.3800335,17z/data=!3m1!4b1!4m5!3m4!1s0x47c3c4485d19ce43:0xe8eb9253c07c6691!8m2!3d50.8132068!4d4.3822222")
+    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.google.com/maps/search/?api=1&query=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")
 
     transportationController.transportationViewController(transportationViewController, didSelect: .bus)
     XCTAssertEqual(navigationService.makeInfoViewControllerArgValues.map(\.0), ["By bus and/or tram"])

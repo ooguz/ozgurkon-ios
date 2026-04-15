@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import SnapshotTesting
 import XCTest
 
@@ -24,14 +24,14 @@ final class MoreViewControllerTests: XCTestCase {
       }
     }
 
-    XCTAssertEqual(delegate.moreViewControllerCallCount, 10)
+    XCTAssertEqual(delegate.moreViewControllerCallCount, 9)
     XCTAssertEqual(
       delegate.moreViewControllerArgValues.map(\.0),
-      [MoreViewController](repeating: moreViewController, count: 10)
+      [MoreViewController](repeating: moreViewController, count: 9)
     )
     XCTAssertEqual(
       delegate.moreViewControllerArgValues.map(\.1),
-      [.years, .history, .devrooms, .transportation, .video, .code, .acknowledgements, .legal, .overrideTime, .generateDatabase]
+      [.years, .history, .transportation, .video, .code, .acknowledgements, .legal, .overrideTime, .generateDatabase]
     )
   }
 }

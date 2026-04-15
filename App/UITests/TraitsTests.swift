@@ -7,16 +7,9 @@ final class TraitsTests: XCTestCase {
     app.searchButton.tap()
 
     runActivity(named: "Show event") {
-      app.day1TrackCell.tap()
+      app.firstTrackCell.tap()
       wait { app.trackTable.exists }
-      app.day1TrackEventCell.tap()
-    }
-
-    runActivity(named: "Show fullscreen blueprints") {
-      app.mapButton.tap()
-      wait { app.buildingView.exists }
-      app.buildingView.tap()
-      app.blueprintsContainer.tap()
+      app.firstTrackEventCell.tap()
     }
 
     let settings = XCUIApplication.settings
@@ -30,7 +23,6 @@ final class TraitsTests: XCTestCase {
 
     runActivity(named: "Dismiss everything") {
       app.activate()
-      app.blueprintsFullscreenDismissButton.tap()
       app.searchButton.tap()
       app.backButton.tap()
       app.backButton.tap()
@@ -48,9 +40,9 @@ final class TraitsTests: XCTestCase {
     app.searchButton.tap()
 
     runActivity(named: "Present views") {
-      app.day1TrackCell.tap()
+      app.firstTrackCell.tap()
       wait { app.trackTable.exists }
-      app.day1TrackEventCell.tap()
+      app.firstTrackEventCell.tap()
       app.moreButton.tap()
       app.cells["history"].tap()
     }
