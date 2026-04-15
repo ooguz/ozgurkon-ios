@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import XCTest
 
 final class FavoritesServiceTests: XCTestCase {
@@ -7,7 +7,7 @@ final class FavoritesServiceTests: XCTestCase {
     let ubiquitousPreferencesService = makeUbiquitousPreferencesService()
     let preferencesService = makePreferencesService()
     let timeService = makeTimeService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: timeService)
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: timeService)
     service.addTrack(withIdentifier: "1")
     XCTAssertEqual(service.tracksIdentifiers, ["1"])
 
@@ -27,7 +27,7 @@ final class FavoritesServiceTests: XCTestCase {
   func testRemoveTrack() throws {
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.addTrack(withIdentifier: "1")
     service.addTrack(withIdentifier: "2")
     service.addTrack(withIdentifier: "3")
@@ -60,7 +60,7 @@ final class FavoritesServiceTests: XCTestCase {
   func testAddEvent() {
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.addEvent(withIdentifier: 1)
     XCTAssertEqual(service.eventsIdentifiers, [1])
 
@@ -80,7 +80,7 @@ final class FavoritesServiceTests: XCTestCase {
   func testRemoveEvent() throws {
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.addEvent(withIdentifier: 1)
     service.addEvent(withIdentifier: 2)
     service.addEvent(withIdentifier: 3)
@@ -124,7 +124,7 @@ final class FavoritesServiceTests: XCTestCase {
 
     let preferencesService = PreferencesService(userDefaults: userDefaults)
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     let tracksObserver: NSObjectProtocol = service.addObserverForTracks { tracksExpectation.fulfill() }
     let eventsObserver: NSObjectProtocol = service.addObserverForEvents { eventsExpectation.fulfill() }
 
@@ -156,7 +156,7 @@ final class FavoritesServiceTests: XCTestCase {
 
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
 
     service.addEvent(withIdentifier: 1)
     service.addEvent(withIdentifier: 2)
@@ -182,7 +182,7 @@ final class FavoritesServiceTests: XCTestCase {
   func testStartMonitoring() {
     let ubiquitousPreferencesService = UbiquitousPreferencesServiceProtocolMock()
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
 
     var observer: ((String) -> Void)?
     ubiquitousPreferencesService.addObserverHandler = { value in
@@ -252,7 +252,7 @@ final class FavoritesServiceTests: XCTestCase {
     }
 
     let preferencesService = makePreferencesService()
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.startMonitoring()
     XCTAssertEqual(service.eventsIdentifiers, Set(events.identifiers))
     XCTAssertEqual(service.tracksIdentifiers, Set(tracks.identifiers))
@@ -280,7 +280,7 @@ final class FavoritesServiceTests: XCTestCase {
     let preferencesService = PreferencesServiceProtocolMock()
     preferencesService.valueHandler = valueHandler
 
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.startMonitoring()
     XCTAssertTrue(preferencesService.setArgValues.isEmpty)
     XCTAssertTrue(ubiquitousPreferencesService.setArgValues.isEmpty)
@@ -311,7 +311,7 @@ final class FavoritesServiceTests: XCTestCase {
       "com.mttcrsp.ansia.FavoritesService.favoriteTracks": oldTracks.dictionaryValue,
     ])
 
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.startMonitoring()
     XCTAssertEqual(service.eventsIdentifiers, Set(newEvents.identifiers))
     XCTAssertEqual(service.tracksIdentifiers, Set(newTracks.identifiers))
@@ -350,7 +350,7 @@ final class FavoritesServiceTests: XCTestCase {
       }
     }
 
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: preferencesService, ubiquitousPreferencesService: ubiquitousPreferencesService, timeService: TimeServiceProtocolMock())
     service.startMonitoring()
 
     XCTAssertTrue(preferencesService.setArgValues.isEmpty)
@@ -382,7 +382,7 @@ final class FavoritesServiceTests: XCTestCase {
       }
     }
 
-    let service = FavoritesService(fosdemYear: 2023, preferencesService: makePreferencesService(), ubiquitousPreferencesService: makeUbiquitousPreferencesService(), timeService: TimeServiceProtocolMock(), userDefaults: userDefaults)
+    let service = FavoritesService(fosdemYear: 2026, preferencesService: makePreferencesService(), ubiquitousPreferencesService: makeUbiquitousPreferencesService(), timeService: TimeServiceProtocolMock(), userDefaults: userDefaults)
     service.migrate()
     XCTAssertEqual(service.eventsIdentifiers, [1, 2, 3])
     XCTAssertEqual(service.tracksIdentifiers, ["4", "5"])

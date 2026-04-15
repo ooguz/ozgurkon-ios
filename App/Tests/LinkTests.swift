@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import XCTest
 
 final class LinkTests: XCTestCase {
@@ -45,6 +45,11 @@ final class LinkTests: XCTestCase {
 
   func testIsAdditionIgnoresFeedback() {
     let link = Link(name: "test", url: URL(string: "https://submission.fosdem.org/feedback/14956.php"))
+    XCTAssertFalse(link.isAddition)
+  }
+
+  func testIsAdditionIgnoresPretalxFeedback() {
+    let link = Link(name: "Feedback", url: URL(string: "https://cfp.oyd.org.tr/ozgurkon-2026/talk/ABC/feedback/"))
     XCTAssertFalse(link.isAddition)
   }
 

@@ -1,5 +1,5 @@
 @testable
-import Fosdem
+import OzgurKon
 import GRDB
 import XCTest
 
@@ -73,7 +73,7 @@ final class PersistenceServiceTests: XCTestCase {
   }
 
   private func makeError() -> NSError {
-    .init(domain: "com.mttcrsp.fosdem.\(String(describing: Self.self))", code: -1)
+    .init(domain: "org.ozgurkon.app.\(String(describing: Self.self))", code: -1)
   }
 
   private struct Write: PersistenceServiceWrite {
