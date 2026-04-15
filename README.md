@@ -1,26 +1,38 @@
-> The name FOSDEM and the gear logo are registered trademarks of FOSDEM VZW
+# ÖzgürKon for iOS
 
-[![MIT license](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/wikimedia/wikipedia-ios/develop/LICENSE.txt)
-[![codecov](https://codecov.io/gh/mttcrsp/fosdem/branch/main/graph/badge.svg?token=fKaqxmEQC7)](https://codecov.io/gh/mttcrsp/fosdem)
+ÖzgürKon is the international free software conference organized by [Özgür Yazılım Derneği](https://oyd.org.tr/). This app helps attendees browse the [Pretalx schedule](https://cfp.oyd.org.tr/ozgurkon-2026/) and manage favorites on iPhone and iPad.
 
-# Fosdem.app
+## Upstream
 
-[![Available on the App Store](http://cl.ly/WouG/Download_on_the_App_Store_Badge_US-UK_135x40.svg)](https://itunes.apple.com/it/app/id1513719757)
+This project is a fork of [FOSDEM.app](https://github.com/mttcrsp/fosdem) by Matteo Cortesi. The FOSDEM name and gear logo are trademarks of FOSDEM VZW and are not used here.
 
-FOSDEM.app is a full featured iOS application that lets you organise your visit to the FOSDEM conference.
+## Development
 
-- Check the schedule for each track and search for events
-- Watch videos from this and previous years of the conference
-- Navigate around the campus with a map and blueprints for each building
-- Build up an agenda with your favorite events to quickly see what is coming up next
-- Get access to slides and all material provided by speakers
+Generate the Xcode project, mocks, and assets (requires [XcodeGen](https://github.com/yonaskolb/XcodeGen), [Mockolo](https://github.com/uber/mockolo), [SwiftGen](https://github.com/SwiftGen/SwiftGen)):
 
-The app is compatible with iOS 11+ iPhone/iPad devices and Mac computers with Apple silicon, and provides support for dynamic type, VoiceOver and Dark Mode.
+```bash
+make generate_project
+make run_mockolo run_swiftgen
+```
 
-## Contributing
+SwiftGen reads `App/Resources/en.lproj/Localizable.strings` only. After adding keys there, mirror them in `App/Resources/tr.lproj/Localizable.strings` for Turkish.
 
-Contributions in the form of code, issues and feature requests are welcome! To get started with development, run `brew bundle && make generate_project`.
+Run tests:
 
-## Acknowledgements
+```bash
+make test
+```
 
-Fosdem.app is powered by the following open source projects: [GRDB.swift](https://github.com/groue/GRDB.swift), [Mockolo](https://github.com/uber/mockolo), [SnapshotTesting](https://github.com/pointfreeco/swift-snapshot-testing), [Periphery](https://github.com/peripheryapp/periphery), [SwiftFormat](https://github.com/nicklockwood/SwiftFormat), [xcbeautify](https://github.com/tuist/xcbeautify), [XcodeGen](https://github.com/yonaskolb/XcodeGen).
+After branding or UI changes, snapshot tests may need re-recording from Xcode.
+
+## Schedule data
+
+The app loads `schedule.xml` from Pretalx (`PretalxConfiguration` in sources). Only the configured conference edition year is supported for downloads.
+
+## App Store
+
+Set `URL.appStore` in [`App/Sources/Extensions/URL+Extensions.swift`](App/Sources/Extensions/URL+Extensions.swift) when the app has a public listing.
+
+## License
+
+See the upstream FOSDEM.app repository for the original license terms. New contributions in this fork should stay compatible with that license unless stated otherwise.

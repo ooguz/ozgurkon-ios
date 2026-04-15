@@ -11,7 +11,7 @@ run_mockolo:
 	mockolo \
 		--sourcedirs App/Sources/ \
 		--destination App/Mocks/Mockolo.swift \
-		--testable-imports Fosdem \
+		--testable-imports OzgurKon \
 		--mock-final \
 		--enable-args-history
 
@@ -24,7 +24,7 @@ run_swiftgen:
 	if [ ! -f "App/Sources/Derived" ]; then \
 		mkdir App/Sources/Derived; \
 	fi; \
-	swiftgen run strings App/Resources/* \
+	swiftgen run strings App/Resources/en.lproj/Localizable.strings \
 		-t structured-swift5 \
 		-o App/Sources/Derived/Strings.swift
 	swiftgen run xcassets App/Resources/* \
@@ -33,6 +33,6 @@ run_swiftgen:
 
 test:
 	xcodebuild \
-		-scheme FOSDEM \
+		-scheme OzgurKon \
 		-destination 'platform=iOS Simulator,OS=16.2,name=iPhone 8 Plus' \
 		test | xcbeautify
