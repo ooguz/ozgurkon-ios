@@ -23,7 +23,12 @@ final class WelcomeViewController: UIViewController {
     return stackView
   }()
 
-  private let imageView = UIImageView(image: Asset.Search.logo.image)
+  private let imageView: UIImageView = {
+    let imageView = UIImageView(image: Asset.Search.logo.image)
+    imageView.contentMode = .scaleAspectFit
+    imageView.accessibilityIgnoresInvertColors = true
+    return imageView
+  }()
 
   private lazy var messageLabel: UILabel = {
     let messageLabel = UILabel()
@@ -120,7 +125,7 @@ final class WelcomeViewController: UIViewController {
     let titleFont: UIFont = .fos_preferredFont(forTextStyle: .title1, withSymbolicTraits: .traitBold)
     let titleAttributes: [NSAttributedString.Key: Any] = [.font: titleFont, .foregroundColor: UIColor.label]
     let titleString = L10n.Welcome.title(year)
-    let messageFont: UIFont = .fos_preferredFont(forTextStyle: .title3, withSymbolicTraits: .traitItalic)
+    let messageFont: UIFont = .fos_preferredFont(forTextStyle: .title3)
     let messageAttributes: [NSAttributedString.Key: Any] = [.font: messageFont, .foregroundColor: UIColor.label]
     let messageString = L10n.Welcome.message
 
