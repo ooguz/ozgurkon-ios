@@ -26,9 +26,9 @@ extension TransportationController: TransportationViewControllerDelegate {
   func transportationViewController(_ transportationViewController: TransportationViewController, didSelect item: TransportationItem) {
     switch item {
     case .appleMaps:
-      self.transportationViewController(transportationViewController, didSelect: .ulbAppleMaps)
+      self.transportationViewController(transportationViewController, didSelect: .venueAppleMaps)
     case .googleMaps:
-      self.transportationViewController(transportationViewController, didSelect: .ulbGoogleMaps)
+      self.transportationViewController(transportationViewController, didSelect: .venueGoogleMaps)
     case .bus, .car, .taxi, .plane, .train:
       if let info = item.info {
         self.transportationViewController(transportationViewController, didSelect: item, info: info)
@@ -61,6 +61,6 @@ extension TransportationController: TransportationViewControllerDelegate {
 }
 
 private extension URL {
-  static let ulbAppleMaps = URL(string: "https://maps.apple.com/?address=Avenue%20Franklin%20Roosevelt%2050,%201050%20Brussels,%20Belgium&auid=2450730505287536200&ll=50.812050,4.382236&lsp=9902&q=Universit%C3%A9%20Libre%20de%20Bruxelles&_ext=ChgKBAgEEFcKBAgFEAMKBAgGEBkKBAgKEAESJCkjtQWwbFxJQDFgm0ZDufUQQDkZviUmcHNJQEGgZLl8GBkSQA%3D%3D")!
-  static let ulbGoogleMaps = URL(string: "https://www.google.com/maps/place/Universit%C3%A9+Libre+de+Bruxelles/@50.8132068,4.3800335,17z/data=!3m1!4b1!4m5!3m4!1s0x47c3c4485d19ce43:0xe8eb9253c07c6691!8m2!3d50.8132068!4d4.3822222")!
+  static let venueAppleMaps = URL(string: "https://maps.apple.com/?q=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")!
+  static let venueGoogleMaps = URL(string: "https://www.google.com/maps/search/?api=1&query=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")!
 }

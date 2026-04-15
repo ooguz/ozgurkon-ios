@@ -38,11 +38,14 @@ extension Link {
   }
 
   private var isFeedback: Bool {
-    if let url {
-      url.host == "submission.fosdem.org" && url.pathComponents.contains("feedback")
-    } else {
-      false
+    guard let url else { return false }
+    if url.host == "submission.fosdem.org", url.pathComponents.contains("feedback") {
+      return true
     }
+    if url.host == "cfp.oyd.org.tr", url.path.contains("/feedback") {
+      return true
+    }
+    return false
   }
 
   private var isChat: Bool {

@@ -39,6 +39,9 @@ extension MoreItem {
     case .years:
       let lowerBound = YearsService.all.lowerBound
       let upperBound = YearsService.all.upperBound
+      if lowerBound == upperBound {
+        return L10n.Years.year(lowerBound)
+      }
       return L10n.Years.item(lowerBound, upperBound)
     #if DEBUG
     case .overrideTime:

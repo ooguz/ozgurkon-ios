@@ -21,7 +21,7 @@ extension MoreSection {
     case .other:
       return [.code, .acknowledgements, .legal]
     case .about:
-      return [.history, .devrooms, .transportation]
+      return [.history, .transportation]
     case .settings:
       return [.timeZone]
     #if DEBUG

@@ -1,5 +1,13 @@
 [
   {
+    "name": "FOSDEM.app (upstream)",
+    "url": "https://github.com/mttcrsp/fosdem"
+  },
+  {
+    "name": "pretalx",
+    "url": "https://github.com/pretalx/pretalx"
+  },
+  {
     "name": "GRDB.swift",
     "url": "https://github.com/groue/GRDB.swift"
   },
