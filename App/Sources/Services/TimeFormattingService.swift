@@ -14,7 +14,7 @@ enum FormattingTimeZone: Int, CaseIterable {
 }
 
 final class DateFormattingService {
-  private static let domain = "com.mttcrsp.fosdem.DateFormattingService"
+  private static let domain = "org.ozgurkon.app.DateFormattingService"
   private static let didChangeFormattingTimeZone = Notification.Name("\(domain).didChangeFormattingTimeZone")
   private static let formattingTimeZoneKey = "\(domain).formattingTimeZone"
   
@@ -39,6 +39,15 @@ final class DateFormattingService {
     return formatter
   }()
 
+  /// e.g. Turkish: "25 Nisan Cumartesi 10:00", English: locale-appropriate order.
+  private lazy var eventScheduleDateTimeFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d MMMM EEEE HH:mm"
+    formatter.timeZone = formattingTimeZone.timeZone
+    formatter.locale = .autoupdatingCurrent
+    return formatter
+  }()
+
   private let notificationCenter = NotificationCenter()
   private let userDefaults: UserDefaults
 
@@ -48,7 +57,7 @@ final class DateFormattingService {
 
   var formattingTimeZone: FormattingTimeZone {
     set {
-      for formatter in [timeFormatter, weekdayFormatter, weekdayWithShortDateFormatter] {
+      for formatter in [timeFormatter, weekdayFormatter, weekdayWithShortDateFormatter, eventScheduleDateTimeFormatter] {
         formatter.timeZone = newValue.timeZone
       }
       notificationCenter.post(name: Self.didChangeFormattingTimeZone, object: nil)
@@ -81,6 +90,10 @@ final class DateFormattingService {
   func weekdayWithShortDate(from date: Date) -> String {
     weekdayWithShortDateFormatter.string(from: date)
   }
+
+  func eventScheduleDateTime(from date: Date) -> String {
+    eventScheduleDateTimeFormatter.string(from: date)
+  }
 }
 
 /// @mockable
@@ -91,6 +104,7 @@ protocol DateFormattingServiceProtocol: AnyObject {
   func time(from date: Date) -> String
   func weekday(from date: Date) -> String
   func weekdayWithShortDate(from date: Date) -> String
+  func eventScheduleDateTime(from date: Date) -> String
 }
 
 extension DateFormattingService: DateFormattingServiceProtocol {}

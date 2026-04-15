@@ -21,6 +21,8 @@ final class EventView: UIStackView {
 
   var dependencies: Dependencies?
   private var observer: NSObjectProtocol?
+  private weak var scheduleClockAttributeView: EventAttributeView?
+  private weak var scheduleDurationAttributeView: EventAttributeView?
   private weak var livestreamButton: UIButton?
   private weak var trackAttributeView: EventAttributeView?
   private weak var videoButton: UIButton?
@@ -62,6 +64,13 @@ final class EventView: UIStackView {
   }
 
   private func didChangeEvent() {
+    if let observer, let formatting = dependencies?.dateFormattingService {
+      formatting.removeObserverForFormattingTimeZoneChanges(observer)
+    }
+    observer = nil
+    scheduleClockAttributeView = nil
+    scheduleDurationAttributeView = nil
+
     for subview in arrangedSubviews {
       removeArrangedSubview(subview)
       subview.removeFromSuperview()
@@ -118,18 +127,44 @@ final class EventView: UIStackView {
       font: UIFont.fos_preferredFont(forTextStyle: .title2)
     )
 
-    if let date = dependencies?.dateFormattingService.date(for: event) {
-      let attributeView = EventAttributeView()
-      attributeView.accessibilityLabel = date
-      attributeView.text = date
-      attributeView.image = .init(systemName: "clock.circle.fill", withConfiguration: configuration)
-      attributesView.addArrangedSubview(attributeView)
+    if let deps = dependencies {
+      let dateTime = deps.dateFormattingService.eventScheduleDateTime(from: event.date)
+      let durationPhrase = DurationFormatter().duration(from: event.duration).map { L10n.Event.duration($0) }
+      let maxLabelWidth = scheduleAttributesMaxLabelWidth()
+      let combinedForMeasure = durationPhrase.map { "\(dateTime) (\($0))" }
+      let shouldSplitDuration = combinedForMeasure.map { !eventScheduleFitsSingleLine($0, maxWidth: maxLabelWidth) } ?? false
 
-      observer = dependencies?.dateFormattingService.addObserverForFormattingTimeZoneChanges { [weak self, weak attributeView] in
-        if let date = self?.dependencies?.dateFormattingService.date(for: event) {
-          attributeView?.accessibilityLabel = date
-          attributeView?.text = date
-        }
+      let clockView = EventAttributeView()
+      clockView.image = .init(systemName: "clock.circle.fill", withConfiguration: configuration)
+
+      if shouldSplitDuration, let phrase = durationPhrase {
+        clockView.text = dateTime
+        clockView.accessibilityLabel = dateTime
+
+        let durationView = EventAttributeView()
+        durationView.image = .init(systemName: "stopwatch", withConfiguration: configuration)
+        durationView.text = phrase
+        durationView.accessibilityLabel = phrase
+
+        attributesView.addArrangedSubview(clockView)
+        attributesView.addArrangedSubview(durationView)
+        scheduleClockAttributeView = clockView
+        scheduleDurationAttributeView = durationView
+      } else if let phrase = durationPhrase {
+        let combined = "\(dateTime) (\(phrase))"
+        clockView.text = combined
+        clockView.accessibilityLabel = combined
+        attributesView.addArrangedSubview(clockView)
+        scheduleClockAttributeView = clockView
+      } else {
+        clockView.text = dateTime
+        clockView.accessibilityLabel = dateTime
+        attributesView.addArrangedSubview(clockView)
+        scheduleClockAttributeView = clockView
+      }
+
+      observer = deps.dateFormattingService.addObserverForFormattingTimeZoneChanges { [weak self] in
+        self?.updateScheduleAttributeLabels(for: event)
       }
     }
 
@@ -281,21 +316,44 @@ final class EventView: UIStackView {
       delegate?.eventView(self, didSelect: item.url)
     }
   }
-}
 
-private extension DateFormattingServiceProtocol {
-  func date(for event: Event) -> String? {
-    var components: [String] = []
-    components.append(time(from: event.date))
-    components.append(L10n.Event.weekday(weekday(from: event.date)))
-    if let duration = DurationFormatter().duration(from: event.duration) {
-      components.append("(\(L10n.Event.duration(duration)))")
-    }
+  private func scheduleAttributesMaxLabelWidth() -> CGFloat {
+    let screenWidth = window?.bounds.width ?? UIScreen.main.bounds.width
+    let containerWidth = bounds.width > 10 ? bounds.width : screenWidth
+    // EventAttributesView horizontal insets (16+16) and icon column (~34) + spacing (10).
+    return max(80, containerWidth - 32 - 44)
+  }
 
-    if components.isEmpty {
-      return nil
+  private func eventScheduleFitsSingleLine(_ text: String, maxWidth: CGFloat) -> Bool {
+    let font = UIFont.fos_preferredFont(forTextStyle: .body)
+    let size = (text as NSString).boundingRect(
+      with: CGSize(width: maxWidth, height: .greatestFiniteMagnitude),
+      options: [.usesLineFragmentOrigin, .usesFontLeading],
+      attributes: [.font: font],
+      context: nil
+    )
+    return size.height <= font.lineHeight * 1.25
+  }
+
+  private func updateScheduleAttributeLabels(for event: Event) {
+    guard let deps = dependencies else { return }
+    let dateTime = deps.dateFormattingService.eventScheduleDateTime(from: event.date)
+    let durationPhrase = DurationFormatter().duration(from: event.duration).map { L10n.Event.duration($0) }
+
+    if scheduleDurationAttributeView != nil {
+      scheduleClockAttributeView?.text = dateTime
+      scheduleClockAttributeView?.accessibilityLabel = dateTime
+      if let phrase = durationPhrase {
+        scheduleDurationAttributeView?.text = phrase
+        scheduleDurationAttributeView?.accessibilityLabel = phrase
+      }
+    } else if let phrase = durationPhrase {
+      let combined = "\(dateTime) (\(phrase))"
+      scheduleClockAttributeView?.text = combined
+      scheduleClockAttributeView?.accessibilityLabel = combined
     } else {
-      return components.joined(separator: " ")
+      scheduleClockAttributeView?.text = dateTime
+      scheduleClockAttributeView?.accessibilityLabel = dateTime
     }
   }
 }
