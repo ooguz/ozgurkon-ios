@@ -153,11 +153,11 @@
 "transportation.item.apple" = "Apple Haritalar’da aç";
 "transportation.item.google" = "Google Haritalar’da aç";
 "transportation.item.openstreetmap" = "OpenStreetMap’te aç";
-"transportation.item.bus" = "Otobüs ve/veya tramvay";
+"transportation.item.bus" = "Otobüs/Vapur/Metro/Marmaray";
 "transportation.item.train" = "Tren";
 "transportation.item.car" = "Araba";
 "transportation.item.plane" = "Uçak";
-"transportation.item.taxi" = "Taksi";
+"transportation.item.taxi" = "Şehirlerarası ulaşım";
 
 /// MARK: - Update
 
