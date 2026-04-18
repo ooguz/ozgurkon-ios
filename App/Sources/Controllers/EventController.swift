@@ -125,6 +125,7 @@ final class EventController: UIViewController {
       dependencies.favoritesService.removeEvent(withIdentifier: event.id)
     } else {
       dependencies.favoritesService.addEvent(withIdentifier: event.id)
+      showTransientConfirmationBanner(L10n.Event.addedConfirmation)
     }
   }
   

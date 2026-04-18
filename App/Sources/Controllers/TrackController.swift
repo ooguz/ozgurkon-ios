@@ -89,6 +89,7 @@ extension TrackController: EventsViewControllerFavoritesDataSource, EventsViewCo
 
   func eventsViewController(_: EventsViewController, didFavorite event: Event) {
     dependencies.favoritesService.addEvent(withIdentifier: event.id)
+    showTransientConfirmationBanner(L10n.Event.addedConfirmation)
   }
 
   func eventsViewController(_: EventsViewController, didUnfavorite event: Event) {

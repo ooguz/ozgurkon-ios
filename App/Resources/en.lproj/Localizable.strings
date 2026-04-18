@@ -45,6 +45,8 @@
 "event.add" = "Add to Agenda";
 // A button that removes an event from the user agenda
 "event.remove" = "Remove from Agenda";
+// Brief confirmation after adding a session to the personal agenda (calendar control)
+"event.added_confirmation" = "Added to your agenda";
 
 /// MARK: - Attachment
 

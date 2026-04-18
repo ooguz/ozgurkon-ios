@@ -24,6 +24,7 @@
 "event.duration" = "%@ dakika";
 "event.add" = "Takvimine ekle";
 "event.remove" = "Takviminden çıkar";
+"event.added_confirmation" = "Takvimine eklendi";
 
 /// MARK: - Attachment
 
