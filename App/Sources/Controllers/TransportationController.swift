@@ -29,6 +29,8 @@ extension TransportationController: TransportationViewControllerDelegate {
       self.transportationViewController(transportationViewController, didSelect: .venueAppleMaps)
     case .googleMaps:
       self.transportationViewController(transportationViewController, didSelect: .venueGoogleMaps)
+    case .openStreetMap:
+      self.transportationViewController(transportationViewController, didSelect: .venueOpenStreetMap)
     case .bus, .car, .taxi, .plane, .train:
       if let info = item.info {
         self.transportationViewController(transportationViewController, didSelect: item, info: info)
@@ -61,6 +63,8 @@ extension TransportationController: TransportationViewControllerDelegate {
 }
 
 private extension URL {
-  static let venueAppleMaps = URL(string: "https://maps.apple.com/?q=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")!
-  static let venueGoogleMaps = URL(string: "https://www.google.com/maps/search/?api=1&query=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")!
+  /// Caferağa Mah. Nailbey Sok. No:29/A Kadıköy/İstanbul
+  static let venueAppleMaps = URL(string: "https://maps.apple.com/?q=Cafera%C4%9Fa%20Mah.%20Nailbey%20Sok.%20No%3A29%2FA%20Kad%C4%B1k%C3%B6y%2F%C4%B0stanbul")!
+  static let venueGoogleMaps = URL(string: "https://www.google.com/maps/search/?api=1&query=Cafera%C4%9Fa%20Mah.%20Nailbey%20Sok.%20No%3A29%2FA%20Kad%C4%B1k%C3%B6y%2F%C4%B0stanbul")!
+  static let venueOpenStreetMap = URL(string: "https://www.openstreetmap.org/way/694272066")!
 }

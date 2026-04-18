@@ -38,11 +38,15 @@ final class TransportationControllerTests: XCTestCase {
 
     transportationController.transportationViewController(transportationViewController, didSelect: .appleMaps)
     XCTAssertEqual(openService.openCallCount, 1)
-    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://maps.apple.com/?q=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")
+    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://maps.apple.com/?q=Cafera%C4%9Fa%20Mah.%20Nailbey%20Sok.%20No%3A29%2FA%20Kad%C4%B1k%C3%B6y%2F%C4%B0stanbul")
 
     transportationController.transportationViewController(transportationViewController, didSelect: .googleMaps)
     XCTAssertEqual(openService.openCallCount, 2)
-    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.google.com/maps/search/?api=1&query=Bar%C4%B1%C5%9F%20Man%C3%A7o%20K%C3%BClt%C3%BCr%20Merkezi%20Istanbul")
+    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.google.com/maps/search/?api=1&query=Cafera%C4%9Fa%20Mah.%20Nailbey%20Sok.%20No%3A29%2FA%20Kad%C4%B1k%C3%B6y%2F%C4%B0stanbul")
+
+    transportationController.transportationViewController(transportationViewController, didSelect: .openStreetMap)
+    XCTAssertEqual(openService.openCallCount, 3)
+    XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.openstreetmap.org/way/694272066")
 
     transportationController.transportationViewController(transportationViewController, didSelect: .bus)
     XCTAssertEqual(navigationService.makeInfoViewControllerArgValues.map(\.0), ["By bus and/or tram"])

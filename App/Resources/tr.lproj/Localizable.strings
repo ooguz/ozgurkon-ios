@@ -152,6 +152,7 @@
 "transportation.section.by" = "Şununla ulaşım";
 "transportation.item.apple" = "Apple Haritalar’da aç";
 "transportation.item.google" = "Google Haritalar’da aç";
+"transportation.item.openstreetmap" = "OpenStreetMap’te aç";
 "transportation.item.bus" = "Otobüs ve/veya tramvay";
 "transportation.item.train" = "Tren";
 "transportation.item.car" = "Araba";

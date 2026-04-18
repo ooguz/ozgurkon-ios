@@ -1,7 +1,7 @@
 import UIKit
 
 enum TransportationItem: String {
-  case appleMaps, googleMaps
+  case appleMaps, googleMaps, openStreetMap
   case bus, train, car, plane, taxi
 }
 
@@ -77,7 +77,7 @@ private extension TransportationSection {
 
   var items: [TransportationItem] {
     switch self {
-    case .directions: [.appleMaps, .googleMaps]
+    case .directions: [.appleMaps, .googleMaps, .openStreetMap]
     case .by: [.bus, .train, .car, .plane, .taxi]
     }
   }
@@ -90,6 +90,8 @@ extension TransportationItem {
       L10n.Transportation.Item.google
     case .appleMaps:
       L10n.Transportation.Item.apple
+    case .openStreetMap:
+      L10n.Transportation.Item.openstreetmap
     case .train:
       L10n.Transportation.Item.train
     case .plane:
@@ -115,7 +117,7 @@ extension TransportationItem {
       .plane
     case .train:
       .train
-    case .appleMaps, .googleMaps:
+    case .appleMaps, .googleMaps, .openStreetMap:
       nil
     }
   }
@@ -126,7 +128,7 @@ private extension TransportationItem {
     switch self {
     case .bus, .train, .car, .plane, .taxi:
       .disclosureIndicator
-    case .appleMaps, .googleMaps:
+    case .appleMaps, .googleMaps, .openStreetMap:
       .none
     }
   }
