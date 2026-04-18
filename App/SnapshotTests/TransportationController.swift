@@ -49,7 +49,7 @@ final class TransportationControllerTests: XCTestCase {
     XCTAssertEqual(openService.openArgValues.last?.absoluteString, "https://www.openstreetmap.org/way/694272066")
 
     transportationController.transportationViewController(transportationViewController, didSelect: .bus)
-    XCTAssertEqual(navigationService.makeInfoViewControllerArgValues.map(\.0), ["By bus and/or tram"])
+    XCTAssertEqual(navigationService.makeInfoViewControllerArgValues.map(\.0), ["By public transportation"])
     XCTAssertEqual(navigationService.makeInfoViewControllerArgValues.map(\.1), [.bus])
     XCTAssertEqual(transportationController.showArgValues.map(\.0), [infoViewController])
 
